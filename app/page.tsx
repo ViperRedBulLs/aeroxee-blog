@@ -10,8 +10,12 @@ export default function Home() {
           Welcome to Aeroxee
         </h1>
         <p className="text-lg font-extralight italic">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit atque
-          sit voluptates ea aliquam sequi quisquam quas fugiat unde excepturi?
+          Welcome to my website. If you want to create a free article or want to
+          share your experience about anything, please register an account on{" "}
+          <Link href="/login" className="text-sky-600 underline italic">
+            the account registration page
+          </Link>
+          .
         </p>
         <div className="flex items-center justify-center gap-4">
           <Link href="/" legacyBehavior>
