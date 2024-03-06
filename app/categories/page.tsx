@@ -2,8 +2,14 @@ import Container from "@/components/container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAllCategories } from "@/lib/categories";
 import { Category } from "@/lib/types/category";
+import { Metadata } from "next";
 import Link from "next/link";
 import { Key } from "react";
+
+export const metadata: Metadata = {
+  title: "Categories | aeroxee",
+  description: "This page to show Categories of blog.",
+};
 
 export default async function Categories() {
   const categories = await getAllCategories();
