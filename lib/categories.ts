@@ -14,7 +14,6 @@ async function getAllCategories(): Promise<Category[]> {
 
     return data.data;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
