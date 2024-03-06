@@ -63,7 +63,9 @@ export default function ArticleDeleteAction({ id }: { id: string }) {
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => setOpen(false)}>
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={() => handleDelete(id)}
             className="flex items-center gap-1"
