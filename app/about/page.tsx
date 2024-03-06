@@ -1,6 +1,12 @@
 import Container from "@/components/container";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+const metadata: Metadata = {
+  title: "About | aeroxee",
+  description: "This page to show you what about me.",
+};
 
 export default function About() {
   return (

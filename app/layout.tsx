@@ -11,6 +11,10 @@ const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
 export const metadata: Metadata = {
   title: "aeroxee",
   description: "Aeroxee is a website to use for make a free article.",
+  authors: {
+    name: "aeroxee",
+    url: "https://github.com/aeroxee",
+  },
 };
 
 export default function RootLayout({
