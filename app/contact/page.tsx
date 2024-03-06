@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Mail, Phone } from "lucide-react";
 import { Metadata } from "next";
 
-const metadata: Metadata = {
+export const metadata: Metadata = {
   title: "Contact | aeroxee",
   description: "This is page to describe how to contact me.",
 };

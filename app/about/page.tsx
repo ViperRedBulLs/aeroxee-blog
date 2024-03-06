@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-const metadata: Metadata = {
+export const metadata: Metadata = {
   title: "About | aeroxee",
   description: "This page to show you what about me.",
 };
