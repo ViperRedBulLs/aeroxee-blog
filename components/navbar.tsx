@@ -145,11 +145,11 @@ export default function Navbar() {
 
                 <div
                   ref={navbarRef}
-                  className={`flex items-start lg:items-center gap-5 flex-col lg:flex-row absolute z-20  md:static top-0 ${
-                    show ? "left-0" : "-left-[500px]"
-                  } transition-all ease-in-out w-[50%] lg:w-auto bg-background lg:bg-inherit min-h-screen lg:min-h-0 border-r lg:border-r-0 p-5 lg:p-0`}
+                  className={`flex items-start md:items-center gap-5 flex-col md:flex-row absolute z-50  md:static top-0 ${
+                    show ? "left-0" : "-left-[1000px]"
+                  } transition-all ease-in-out w-[50%] md:w-auto bg-background md:bg-inherit min-h-screen md:min-h-0 border-r md:border-r-0 p-5 md:p-0`}
                 >
-                  <div className="mb-6 flex items-center justify-between w-full lg:hidden">
+                  <div className="mb-6 flex items-center justify-between w-full md:hidden">
                     <Link href={"/"} className="text-2xl font-extrabold">
                       aeroxee
                     </Link>
@@ -202,7 +202,7 @@ export default function Navbar() {
                 <Button
                   type="button"
                   variant="ghost"
-                  className="lg:hidden"
+                  className="md:hidden"
                   onClick={() => setShow(true)}
                 >
                   <Menu />

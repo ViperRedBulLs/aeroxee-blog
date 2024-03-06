@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -68,13 +69,13 @@ export default async function Overview() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {articles.map((article: Article, index: number) => (
-            <Card key={index} className="relative group">
+            <Card key={index} className="md:relative group">
               <CardHeader>
                 <CardTitle>{article.title}</CardTitle>
                 <CardDescription>Status: {article.status}</CardDescription>
               </CardHeader>
-              <div className="absolute top-0 left-0 bottom-0 right-0 bg-background/50 filter backdrop-blur-md rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all ease-in-out">
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <CardContent className="static md:absolute md:top-0 md:left-0 md:bottom-0 md:right-0 md:bg-background/50 md:filter md:backdrop-blur-md md:rounded-md opacity-100 visible md:opacity-0 md:invisible md:group-hover:opacity-100 md:group-hover:visible transition-all ease-in-out">
+                <div className="static md:absolute md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2">
                   <div className="flex items-center justify-center gap-2">
                     <Link href={`/blog/${article._id}`} legacyBehavior>
                       <Button variant="outline">View</Button>
@@ -108,7 +109,7 @@ export default async function Overview() {
                     <ArticleDeleteAction id={article._id} />
                   </div>
                 </div>
-              </div>
+              </CardContent>
             </Card>
           ))}
         </div>

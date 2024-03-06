@@ -16,7 +16,7 @@ export default async function Categories() {
 
   return (
     <Container className="w-[96%] lg:w-[70%] mx-auto py-[90px]">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {categories.map((category: Category, key: Key) => (
           <Card key={key}>
             <CardHeader>

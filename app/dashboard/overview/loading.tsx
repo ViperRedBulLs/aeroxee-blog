@@ -1,6 +1,6 @@
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Plus } from "lucide-react";
 
@@ -23,8 +23,15 @@ export default async function Loading() {
               <Card key={index} className="">
                 <CardHeader>
                   <Skeleton className="w-full h-3.5 mb-2" />
-                  <Skeleton className="w-full h-2" />
+                  <Skeleton className="w-[30%] h-2" />
                 </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-center gap-2">
+                    <Skeleton className="w-[80px] h-6" />
+                    <Skeleton className="w-[80px] h-6" />
+                    <Skeleton className="w-[80px] h-6" />
+                  </div>
+                </CardContent>
               </Card>
             )
           )}
