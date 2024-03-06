@@ -151,7 +151,7 @@ export default function FormRegister() {
           className="flex items-center gap-2"
         >
           {isLoading && <Loader2 className="animate-spin" />}
-          Login
+          Register
         </Button>
       </div>
     </form>
