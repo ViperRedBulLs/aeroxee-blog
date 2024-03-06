@@ -5,6 +5,17 @@ import { Article } from "@/lib/types/articles";
 import { getUserById } from "@/lib/users";
 import { Book, Clock, Eye, User } from "lucide-react";
 import Link from "next/link";
+import Showdown from "showdown";
+
+const articleMarkdown = (content: string) => {
+  const converter = new Showdown.Converter();
+
+  return (
+    <p className="text-sm font-extralight">
+      {stripHtmlAndTruncate(converter.makeHtml(content), 5)}...
+    </p>
+  );
+};
 
 type Props = {
   article: Article;
@@ -37,9 +48,7 @@ export default async function PopularArticleList({ article }: Props) {
           <span>{getMoment(article.createdAt)}</span>
         </div>
       </div>
-      <p className="text-sm font-extralight">
-        {stripHtmlAndTruncate(article.content, 5)}...
-      </p>
+      {articleMarkdown(article.content)}
     </div>
   );
 }

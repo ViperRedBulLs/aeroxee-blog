@@ -5,9 +5,20 @@ import { type Article } from "@/lib/types/articles";
 import { getUserById } from "@/lib/users";
 import { Book, CalendarDays, Clock, Eye, User } from "lucide-react";
 import Link from "next/link";
+import Showdown from "showdown";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+
+const articleMarkdown = (content: string) => {
+  const converter = new Showdown.Converter();
+
+  return (
+    <p className="text-sm font-extralight">
+      {stripHtmlAndTruncate(converter.makeHtml(content), 20)}...
+    </p>
+  );
+};
 
 type ListBlogCardProps = {
   article: Article;
@@ -77,11 +88,7 @@ export default async function ListBlogCard({ article }: ListBlogCardProps) {
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <p className="text-sm font-extralight">
-          {stripHtmlAndTruncate(article.content, 20)}...
-        </p>
-      </CardContent>
+      <CardContent>{articleMarkdown(article.content)}</CardContent>
     </Card>
   );
 }

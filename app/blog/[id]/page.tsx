@@ -14,6 +14,7 @@ import { getUserById } from "@/lib/users";
 import { Book, CalendarDays, Clock, Eye, User } from "lucide-react";
 import { ObjectId } from "mongodb";
 import { Metadata, ResolvingMetadata } from "next";
+import Showdown from "showdown";
 
 export async function generateMetadata(
   { params }: { params: { id: string } },
@@ -28,6 +29,17 @@ export async function generateMetadata(
     description: ``,
   };
 }
+
+const articleMarkdown = (content: string) => {
+  const converter = new Showdown.Converter();
+
+  return (
+    <article
+      className="markdown lg:markdown-lg dark:markdown-invert w-full lg:w-auto"
+      dangerouslySetInnerHTML={{ __html: converter.makeHtml(content) }}
+    />
+  );
+};
 
 export default async function BlogDetail({
   params,
@@ -108,10 +120,7 @@ export default async function BlogDetail({
           </div>
         </div>
         <div className="flex items-center justify-center w-full">
-          <article
-            className="markdown lg:markdown-lg dark:markdown-invert w-full lg:w-auto"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
+          {articleMarkdown(article.content)}
         </div>
       </Container>
     </>

@@ -5,7 +5,6 @@ import { User } from "@/lib/types/users";
 import { getCookie } from "cookies-next";
 import { Loader2 } from "lucide-react";
 import { FormEvent, Key, useState } from "react";
-import Showdown from "showdown";
 import { AlertDialogCancel } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -104,11 +103,7 @@ export default function FormInsertArticle({
           name="status"
           placeholder="Type your content here, using markdown."
           defaultValue={"# Hello World"}
-          onChange={(e) => {
-            const converter = new Showdown.Converter();
-            console.log(converter.makeHtml(e.target.value));
-            setContent(converter.makeHtml(e.target.value));
-          }}
+          onChange={(e) => setContent(e.target.value)}
           required
         />
       </div>
