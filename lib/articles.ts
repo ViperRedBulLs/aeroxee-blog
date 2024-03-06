@@ -17,7 +17,6 @@ async function getArticles(
 
     return data.data;
   } catch (error) {
-    console.error("There was a problem fetching the data:", error);
     return [];
   }
 }
@@ -31,7 +30,6 @@ async function getArticleById(id: string): Promise<Article> {
 
     return data.data;
   } catch (error) {
-    console.error("There was a problem fetching the data:", error);
     const a: Article = {
       _id: "",
       userId: "",
@@ -60,7 +58,6 @@ async function getArticleByUserId(userId: string): Promise<Article[]> {
 
     return data.data;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
@@ -77,7 +74,6 @@ async function deleteArticle(id: string): Promise<boolean> {
       return false;
     }
   } catch (error) {
-    console.log(error);
     return false;
   }
 }

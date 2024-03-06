@@ -30,7 +30,6 @@ async function getCategoryById(id: string): Promise<Category | null> {
       return null;
     }
   } catch (error) {
-    console.log(error);
     return null;
   }
 }
