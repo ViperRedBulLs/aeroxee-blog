@@ -30,8 +30,9 @@ export async function GET(request: Request) {
       .find({
         userId: ObjectId.createFromHexString(userId),
       })
-      .skip(skip)
-      .limit(limit)
+      .sort({
+        createdAt: -1,
+      })
       .toArray();
 
     return Response.json({ status: "success", message: "", data: result });

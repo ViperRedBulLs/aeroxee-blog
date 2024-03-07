@@ -16,6 +16,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
+import { useToast } from "./ui/use-toast";
 
 export default function ArticleDeleteAction({ id }: { id: string }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -23,17 +24,26 @@ export default function ArticleDeleteAction({ id }: { id: string }) {
 
   const router = useRouter();
 
+  const { toast } = useToast();
+
   const handleDelete = async (id: string) => {
     setIsLoading(true);
     const ok = await deleteArticle(id);
     if (ok) {
       setIsLoading(false);
-      window.alert("Successfully delete your article.");
+      toast({
+        title: "Status!",
+        description: "Successfully delete your article.",
+      });
       setOpen(false);
       router.refresh();
     } else {
       setIsLoading(false);
-      window.alert("Failed");
+      toast({
+        title: "Status!",
+        description: "Failed delete your article.",
+        variant: "destructive",
+      });
       setOpen(false);
       router.refresh();
     }

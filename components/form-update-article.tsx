@@ -119,6 +119,7 @@ export default function FormUpdateArticle({
           placeholder="Type your content here, using markdown."
           defaultValue={content}
           onChange={(e) => setContent(e.target.value)}
+          rows={20}
           required
         />
       </div>
