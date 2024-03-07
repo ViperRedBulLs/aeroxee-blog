@@ -25,7 +25,7 @@ export default async function Loading() {
                   <Skeleton className="w-full h-3.5 mb-2" />
                   <Skeleton className="w-[30%] h-2" />
                 </CardHeader>
-                <CardContent>
+                <CardContent className="md:hidden">
                   <div className="flex items-center justify-center gap-2">
                     <Skeleton className="w-[80px] h-6" />
                     <Skeleton className="w-[80px] h-6" />

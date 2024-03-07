@@ -1,31 +1,9 @@
 import Container from "@/components/container";
 import { Card } from "@/components/ui/card";
-import { getArticleByUserId } from "@/lib/articles";
-import { type User } from "@/lib/types/users";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Eye, Newspaper, ThumbsDown, ThumbsUp } from "lucide-react";
-import { Metadata } from "next";
-import { cookies } from "next/headers";
 
-export const metadata: Metadata = {
-  title: "Dashboard | aeroxee",
-  description: "",
-};
-
-export default async function Dashboard() {
-  const cookieStore = cookies();
-  const userCookie = cookieStore.get("user");
-
-  if (!userCookie) return <></>;
-
-  const user: User = JSON.parse(userCookie.value);
-
-  const articles = await getArticleByUserId(user._id);
-
-  let views = 0;
-  for (let i = 0; i < articles.length; i++) {
-    views += articles[i].views;
-  }
-
+export default async function Loading() {
   return (
     <>
       <Container className="pt-[90px] pb-[90px] px-4 md:px-[50px] lg:px-[90px] mx-auto">
@@ -33,25 +11,25 @@ export default async function Dashboard() {
           <Card className="p-5">
             <div className="flex items-center justify-between">
               <Newspaper size={40} />
-              <span className="text-xl">{articles.length}</span>
+              <Skeleton className="w-10 h-10 rounded-full" />
             </div>
           </Card>
           <Card className="p-5">
             <div className="flex items-center justify-between">
               <Eye size={40} />
-              <span className="text-xl">{views}</span>
+              <Skeleton className="w-10 h-10 rounded-full" />
             </div>
           </Card>
           <Card className="p-5">
             <div className="flex items-center justify-between">
               <ThumbsUp size={40} />
-              <span className="text-xl">50</span>
+              <Skeleton className="w-10 h-10 rounded-full" />
             </div>
           </Card>
           <Card className="p-5">
             <div className="flex items-center justify-between">
               <ThumbsDown size={40} />
-              <span className="text-xl">20</span>
+              <Skeleton className="w-10 h-10 rounded-full" />
             </div>
           </Card>
         </div>

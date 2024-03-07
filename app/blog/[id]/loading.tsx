@@ -25,6 +25,42 @@ export default function Loading() {
           <Skeleton className="h-3 w-full mb-3" />
           <Skeleton className="h-3 w-[60%]" />
         </div>
+        <div className="mb-4">
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-[60%]" />
+        </div>
+        <div className="mb-4">
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-[60%]" />
+        </div>
+        <div className="mb-4">
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-[60%]" />
+        </div>
+        <div className="mb-4">
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-[60%]" />
+        </div>
+        <div className="mb-4">
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-[60%]" />
+        </div>
+        <div className="mb-4">
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-full mb-3" />
+          <Skeleton className="h-3 w-[60%]" />
+        </div>
       </div>
     </Container>
   );
