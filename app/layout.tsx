@@ -1,5 +1,6 @@
 import Navbar from "@/components/navbar";
 import ThemeProvider from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
@@ -34,6 +35,7 @@ export default function RootLayout({
           <NextTopLoader height={5} showSpinner={false} zIndex={10000} />
           <Navbar />
           {children}
+          <Toaster />
         </ThemeProvider>
 
         <Analytics />

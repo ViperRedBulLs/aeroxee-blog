@@ -1,159 +1,244 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "./ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { Input } from "./ui/input";
+import { ToastAction } from "./ui/toast";
+import { useToast } from "./ui/use-toast";
+
+const formSchema = z
+  .object({
+    firstName: z.string().min(1, {
+      message: "First name is required.",
+    }),
+    lastName: z.string().min(1, { message: "Last name is required" }),
+    username: z
+      .string()
+      .min(5, {
+        message: "Username must be at least 5 characters.",
+      })
+      .max(15, {
+        message: "Username must be a maximum of 15 characters.",
+      }),
+    email: z
+      .string()
+      .email({
+        message: "Please enter a valid email.",
+      })
+      .min(1, {
+        message: "Email is required.",
+      }),
+    password1: z.string().min(1, { message: "Password is required." }),
+    password2: z
+      .string()
+      .min(1, { message: "Password confirmation is required." }),
+  })
+  .required({
+    firstName: true,
+    lastName: true,
+    username: true,
+    email: true,
+    password1: true,
+    password2: true,
+  });
 
 export default function FormRegister() {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password1, setPassword1] = useState<string>("");
-  const [password2, setPassword2] = useState<string>("");
-  const [showAlert, setShowAlert] = useState<boolean>(false);
-  const [alertType, setAlertType] = useState<
-    "destructive" | "default" | null | undefined
-  >("default");
-  const [alertMessage, setAlertMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const { toast } = useToast();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      username: "",
+      email: "",
+      password1: "",
+      password2: "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
 
-    // check password
-    if (password1 !== password2) {
-      setShowAlert(true);
-      setAlertType("destructive");
+    if (values.password1 !== values.password2) {
+      toast({
+        title: "Password confirmation error",
+        description: "Password confirmation not same.",
+        action: <ToastAction altText="Ok">Ok</ToastAction>,
+        variant: "destructive",
+      });
       setIsLoading(false);
-      setAlertMessage("Password confirmation not match.");
       return;
     }
 
-    const response = await fetch("/api/users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        username: username,
-        email: email,
-        password: password2,
-      }),
-    });
+    try {
+      const response = await fetch(`${process.env.URL}/api/users/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: values.firstName,
+          lastName: values.lastName,
+          username: values.username,
+          email: values.email,
+          password: values.password2,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      setShowAlert(true);
+      if (response.ok) {
+        toast({
+          title: "Success",
+          description:
+            "Congratulation! Your account has been registered. Please login to login page..",
+          action: <ToastAction altText="Ok">Ok</ToastAction>,
+          variant: "default",
+        });
+        setIsLoading(false);
+        return;
+      } else {
+        toast({
+          title: "Register error",
+          description: data.message,
+          action: <ToastAction altText="Ok">Ok</ToastAction>,
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+    } catch {
+      toast({
+        title: "Server error",
+        description: "Server error, please try again.",
+        action: <ToastAction altText="Ok">Ok</ToastAction>,
+        variant: "destructive",
+      });
       setIsLoading(false);
-      setAlertType("default");
-      setAlertMessage(data.message);
-      return;
-    } else {
-      setShowAlert(true);
-      setIsLoading(false);
-      setAlertType("destructive");
-      setAlertMessage(data.message);
       return;
     }
   };
 
   return (
-    <form action="" method="post" onSubmit={handleSubmit}>
-      {showAlert && (
-        <div className="my-5">
-          <Alert variant={alertType}>
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Status</AlertTitle>
-            <AlertDescription>{alertMessage}</AlertDescription>
-          </Alert>
-        </div>
-      )}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-        <div className="flex flex-col gap-1 mb-2">
-          <label htmlFor="first_name">First name</label>
-          <input
-            type="text"
-            name="first_name"
-            className={cn("border bg-background rounded-md px-4 py-2")}
-            onChange={(e) => setFirstName(e.target.value)}
-            autoFocus
-            required
+    <Form {...form}>
+      <form method="post" action="" onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="grid grid-cols-2 gap-2 mb-3">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your first name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex flex-col gap-1 mb-2">
-          <label htmlFor="last_name">Last name</label>
-          <input
-            type="text"
-            name="last_name"
-            className={cn("border bg-background rounded-md px-4 py-2")}
-            onChange={(e) => setLastName(e.target.value)}
-            required
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your last name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex flex-col gap-1 mb-2">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
+          <FormField
+            control={form.control}
             name="username"
-            className={cn("border bg-background rounded-md px-4 py-2")}
-            onChange={(e) => setUsername(e.target.value)}
-            required
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your username" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex flex-col gap-1 mb-2">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
+          <FormField
+            control={form.control}
             name="email"
-            className={cn("border bg-background rounded-md px-4 py-2")}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex flex-col gap-1 mb-2">
-          <label htmlFor="password1">Password</label>
-          <input
-            type="password"
+          <FormField
+            control={form.control}
             name="password1"
-            className={cn("border bg-background rounded-md px-4 py-2")}
-            onChange={(e) => setPassword1(e.target.value)}
-            required
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex flex-col gap-1 mb-2">
-          <label htmlFor="password2">Confirmation Password</label>
-          <input
-            type="password"
+          <FormField
+            control={form.control}
             name="password2"
-            className={cn("border bg-background rounded-md px-4 py-2")}
-            onChange={(e) => setPassword2(e.target.value)}
-            required
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password confirmation</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Enter password confirmation"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </div>
-      </div>
 
-      <div className="flex flex-col gap-2">
-        <Link href="/login" className="text-xs font-extralight underline">
-          Already have an account, login here?
+        <div className="grid grid-cols-1">
+          <Button type="submit" className="flex items-center gap-1">
+            {isLoading && <Loader2 size={20} className="animate-spin" />}
+            Register
+          </Button>
+        </div>
+        <Link href="/login" className="mt-2 text-xs font-extralight underline">
+          Already have an account, login here.
         </Link>
-
-        <Button
-          type="submit"
-          variant="default"
-          className="flex items-center gap-2"
-        >
-          {isLoading && <Loader2 className="animate-spin" />}
-          Register
-        </Button>
-      </div>
-    </form>
+      </form>
+    </Form>
   );
 }

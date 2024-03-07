@@ -1,12 +1,29 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ToastAction } from "@radix-ui/react-toast";
 import { setCookie } from "cookies-next";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { Loader2, LogIn } from "lucide-react";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "./ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { Input } from "./ui/input";
+import { useToast } from "./ui/use-toast";
+
+const formSchema = z.object({
+  username: z.string().min(1, { message: "Username is required." }),
+  password: z.string().min(1, { message: "Password is required." }),
+});
 
 export default function FormLogin() {
   const [username, setUsername] = useState<string>("");
@@ -18,8 +35,17 @@ export default function FormLogin() {
     "destructive" | "default" | null | undefined
   >(null);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const { toast } = useToast();
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "aeroxee",
+      password: "",
+    },
+  });
+
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
 
     const response = await fetch("/api/users/login", {
@@ -28,8 +54,8 @@ export default function FormLogin() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: username,
-        password: password,
+        username: values.username,
+        password: values.password,
       }),
     });
 
@@ -42,60 +68,71 @@ export default function FormLogin() {
         window.location.href = "/";
       }
     } else {
-      setAlertMessage(data.message);
-      setAlertType("destructive");
-      setShowAlert(true);
       setIsLoading(false);
+      toast({
+        title: "Login error",
+        description: "Username or password is incorrect.",
+        action: <ToastAction altText="action">Ok</ToastAction>,
+      });
       return;
     }
   };
 
   return (
-    <form action="" method="post" onSubmit={handleSubmit}>
-      {showAlert && (
-        <div className="my-5">
-          <Alert variant={alertType}>
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Status</AlertTitle>
-            <AlertDescription>{alertMessage}</AlertDescription>
-          </Alert>
-        </div>
-      )}
-      <div className="flex flex-col gap-1 mb-2">
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
+    <Form {...form}>
+      <form
+        action=""
+        method="post"
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-2"
+      >
+        <FormField
+          control={form.control}
           name="username"
-          className={cn("border bg-background rounded-md px-4 py-2")}
-          onChange={(e) => setUsername(e.target.value)}
-          required
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter your username" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="flex flex-col gap-1 mb-2">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
+        <FormField
+          control={form.control}
           name="password"
-          className={cn("border bg-background rounded-md px-4 py-2")}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Enter your password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <Link href="/register" className="text-xs font-extralight underline">
-          Don&apos;t have an account, register here.
-        </Link>
-
-        <Button
-          type="submit"
-          variant="default"
-          className="flex items-center gap-2"
-        >
-          {isLoading && <Loader2 className="animate-spin" />}
-          Login
-        </Button>
-      </div>
-    </form>
+        <div className="flex flex-col gap-2">
+          <Button type="submit" className="flex items-center gap-1">
+            {isLoading ? (
+              <Loader2 size={20} className="animate-spin" />
+            ) : (
+              <LogIn size={20} />
+            )}
+            Login
+          </Button>
+          <Link
+            href="/register"
+            className="mt-2 text-xs font-extralight underline"
+          >
+            Don&apos;t have an account, register here.
+          </Link>
+        </div>
+      </form>
+    </Form>
   );
 }
