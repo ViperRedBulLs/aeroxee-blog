@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ButtonToTop from "./button-to-top";
+import LoginDialog from "./login-dialog";
 import ModeToggle from "./mode-toggle";
 import { Button } from "./ui/button";
 import UserDropdown from "./user-dropdown";
@@ -196,7 +197,7 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center">
                 <ModeToggle />
                 {user && <UserDropdown />}
                 <Button
@@ -207,6 +208,9 @@ export default function Navbar() {
                 >
                   <Menu />
                 </Button>
+
+                {/* User login dialog button  */}
+                {!user && <LoginDialog />}
               </div>
             </div>
           </nav>
